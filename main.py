@@ -16,7 +16,7 @@ class SessionManager:
             which=Which.GGUF(
                 tok_model_id=model_path,
                 quantized_model_id=model_path,
-                quantized_filename="rwkv7-2.9b.gguf"
+                quantized_filename="rwkv7-g1g-2.9b-Q4_K_M.gguf"
             )
         )
 
