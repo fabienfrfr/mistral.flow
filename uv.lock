@@ -1,0 +1,25 @@
+version = 1
+revision = 3
+requires-python = ">=3.13"
+
+[[package]]
+name = "mistral-flow"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "mistralrs" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "mistralrs", specifier = ">=0.8.0" }]
+
+[[package]]
+name = "mistralrs"
+version = "0.8.0"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7f/e0/f80632896a3e7630969e71d962d7927fa23ddcca1a1957a82d3d4e6534b8/mistralrs-0.8.0-cp310-abi3-macosx_15_0_arm64.whl", hash = "sha256:c8eda0e630b671dbd7ab041e5bb66254fa6068455ef9f7b0d0472f0f7f059a93", size = 26963996, upload-time = "2026-04-02T16:03:39.324Z" },
+    { url = "https://files.pythonhosted.org/packages/d5/b9/f292f2fab154a0e444778b60b9bffda12346ed0f9572ded0d17a5ae4bace/mistralrs-0.8.0-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:efb1f66c4c318d9b3ec6708bb09bd8bea565840e6597be413bfe1defdb3e43ef", size = 19960490, upload-time = "2026-04-02T16:03:31.036Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/47/47b55da0c40663bf152c976f2957464d104f62a8693f8ee885589e8247df/mistralrs-0.8.0-cp310-abi3-manylinux_2_39_x86_64.whl", hash = "sha256:e184896e8ae4c58028a76c506b79ff68a6d3a039deaee905a03dcc37b6a32272", size = 25187944, upload-time = "2026-04-02T16:03:55.27Z" },
+    { url = "https://files.pythonhosted.org/packages/63/98/18fdd0b1eb4d4f0be2944e28e44446798bbf32676a59d88e6296b0860e2a/mistralrs-0.8.0-cp310-abi3-win_amd64.whl", hash = "sha256:7afb937c93bea8c7950b6d8c6a89111fef2f2093115f8cbe789c5e54958b6b49", size = 25095931, upload-time = "2026-04-02T16:03:47.349Z" },
+]
