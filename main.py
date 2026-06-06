@@ -1,57 +1,32 @@
-import json
-import logging
-from mistralrs import Runner, Which
-from typing import Optional
+from mistralrs import Runner, Which, ChatCompletionRequest
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("MistralFlow")
+# Using Plain to ensure 100% compatibility with the engine
+runner = Runner(
+    which=Which.Plain(model_id="Qwen/Qwen3.5-2B"),
+    in_situ_quant="4",
+)
 
-class SessionManager:
-    """Handles session persistence for mistral.rs."""
-    
-    def __init__(self, model_path: str):
-        # Initialize the engine
-        self.runner = Runner(
-            which=Which.GGUF(
-                tok_model_id=model_path,
-                quantized_model_id=model_path,
-                quantized_filename="rwkv7-g1g-2.9b-Q4_K_M.gguf"
-            )
-        )
+session_id = "user_123"
 
-    def load_session(self, session_id: str) -> None:
-        """Restores session state from storage."""
-        try:
-            with open(f"{session_id}.json", "r") as f:
-                state = f.read()
-                self.runner.import_session(session_id, state)
-                logger.info(f"Session '{session_id}' restored.")
-        except FileNotFoundError:
-            logger.info(f"Starting new session '{session_id}'.")
+# 1. Load session
+try:
+    with open(f"{session_id}.json", "r") as f:
+        runner.import_session(session_id, f.read())
+except FileNotFoundError:
+    pass
 
-    def save_session(self, session_id: str) -> None:
-        """Exports session state to storage."""
-        state = self.runner.export_session(session_id)
-        if state:
-            with open(f"{session_id}.json", "w") as f:
-                f.write(state)
-            logger.info(f"Session '{session_id}' saved.")
+# 2. Inference (using dictionary instead of Message object)
+res = runner.send_chat_completion_request(
+    ChatCompletionRequest(
+        model="default",
+        messages=[{"role": "user", "content": "Hello! My name is Fabien."}],
+        max_tokens=256,
+    )
+)
+print(res.choices[0].message.content)
 
-    def chat(self, session_id: str, prompt: str) -> str:
-        """Executes a chat turn."""
-        self.load_session(session_id)
-        
-        # In a real app, use the ChatCompletionRequest object
-        response = self.runner.send_chat_completion_request(
-            request=prompt  # Simplified for example purposes
-        )
-        
-        self.save_session(session_id)
-        return response
-
-# Usage
-if __name__ == "__main__":
-    flow = SessionManager(model_path="shoumenchougou/RWKV7-G1g-2.9B-GGUF")
-    result = flow.chat("user_123", "Hello! How does RWKV7 work?")
-    print(result)
+# 3. Save session
+state = runner.export_session(session_id)
+if state:
+    with open(f"{session_id}.json", "w") as f:
+        f.write(state)
